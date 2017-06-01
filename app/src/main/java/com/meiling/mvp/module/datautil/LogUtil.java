@@ -51,13 +51,12 @@ public class LogUtil {
         //TODO 若需要将错误日志记录至文件并上传
         //TODO 这里处理错误日志记录的业务
         if(BuildConfig.LOG_ERROR_SAVE_SWITCH){
-
+            //TODO 调用saveErrorIntoFile方法保存需要记录的错误日志
         }
     }
 
-    //TODO 将错误等级的日志写入
     /**
-     *
+     * TODO 将错误等级的日志写入
      */
     public void saveErrorIntoFile(String errorMsg){
         /**
@@ -73,6 +72,8 @@ public class LogUtil {
          * 是否重新启动日志写入线程判断条件：
          *  队列中当前已经没有了可以进行写入的信息，则将当前消息写入队列，启动线程，写入文件；
          *  若队列中仍然有信息，则直接插入队列中（写入线程将以串行方式将队列中的消息写入，直至队列为空，则停止线程）
+         *  队列为单一队列，并且仅做保存需要写入的错误日志，
+         *  写入线程不断从队列中取出消息，并写入
          */
 
     }
