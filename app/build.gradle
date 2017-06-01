@@ -27,9 +27,12 @@ android {
             buildConfigField "int","LOG_I","3"
             buildConfigField "int","LOG_W","4"
             buildConfigField "int","LOG_E","5"
+
             //错误日志输出开关---若需要将错误日志记录下来，将这个属性设置为true
             buildConfigField "boolean","LOG_ERROR_SAVE_SWITCH","true"
-            buildConfigField "int","COMMON_PROVIDER_VERSION","1"//标识公共数据库版本
+
+            //变更数据库是需要变更这里的数据
+           buildConfigField "int","COMMON_PROVIDER_VERSION","1"//标识公共数据库版本
         }
         release {
             minifyEnabled true
@@ -46,8 +49,11 @@ android {
             buildConfigField "int","LOG_I","3"
             buildConfigField "int","LOG_W","4"
             buildConfigField "int","LOG_E","5"
+
             //错误日志输出开关---若需要将错误日志记录下来，将这个属性设置为true
             buildConfigField "boolean","LOG_ERROR_SAVE_SWITCH","true"
+
+            //变更数据库是需要变更这里的数据
             buildConfigField "int","COMMON_PROVIDER_VERSION","1"//标识公共数据库版本
         }
     }

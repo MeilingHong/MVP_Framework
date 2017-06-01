@@ -170,13 +170,13 @@ public class MainActivity extends AppCompatActivity {
         final Dialog mDialog = new Dialog(this,R.style.CommonDialongStyle);
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_common_hint, null);
         TextView tv_title = (TextView) view.findViewById(R.id.tv_title);
-        tv_title.setText("标题");
+        tv_title.setText(getString(R.string.title));
 
         TextView tv_content = (TextView) view.findViewById(R.id.tv_content);
-        tv_content.setText("Content Line");
+        tv_content.setText(getString(R.string.content));
 
         TextView btn_cancel =  (TextView) view.findViewById(R.id.btn_cancel);
-        btn_cancel.setText("取消");
+        btn_cancel.setText(getString(R.string.cancel));
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         TextView btn_confirm =  (TextView) view.findViewById(R.id.btn_confirm);
-        btn_confirm.setText("确定");
+        btn_confirm.setText(getString(R.string.confirm));
         btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
