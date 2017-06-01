@@ -1,0 +1,86 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.3"
+    defaultConfig {
+        applicationId "com.meiling.mvp"
+        minSdkVersion 16
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        debug{
+            minifyEnabled true
+            zipAlignEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+
+            //Add config value
+            buildConfigField "String", "CustomValue",'"buildType"'
+            buildConfigField "boolean","LOG_DEBUG","true"
+            buildConfigField "int","LOG_LEVEL","3"
+            buildConfigField "int","LOG_V","1"
+            buildConfigField "int","LOG_D","2"
+            buildConfigField "int","LOG_I","3"
+            buildConfigField "int","LOG_W","4"
+            buildConfigField "int","LOG_E","5"
+            //错误日志输出开关---若需要将错误日志记录下来，将这个属性设置为true
+            buildConfigField "boolean","LOG_ERROR_SAVE_SWITCH","true"
+            buildConfigField "int","COMMON_PROVIDER_VERSION","1"//标识公共数据库版本
+        }
+        release {
+            minifyEnabled true
+            zipAlignEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            //Add config value
+            buildConfigField "String", "CustomValue",'"releaseType"'
+            buildConfigField "boolean","LOG_DEBUG","true"
+            buildConfigField "int","LOG_LEVEL","6"
+            buildConfigField "int","LOG_V","1"
+            buildConfigField "int","LOG_D","2"
+            buildConfigField "int","LOG_I","3"
+            buildConfigField "int","LOG_W","4"
+            buildConfigField "int","LOG_E","5"
+            //错误日志输出开关---若需要将错误日志记录下来，将这个属性设置为true
+            buildConfigField "boolean","LOG_ERROR_SAVE_SWITCH","true"
+            buildConfigField "int","COMMON_PROVIDER_VERSION","1"//标识公共数据库版本
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    testCompile 'junit:junit:4.12'
+    //**********************
+    //使用Gson进行反序列化时需要的项目依赖包
+    compile 'com.google.code.gson:gson:2.2.4'
+    //使用ButterKnife插件需要使用的项目依赖包
+    compile 'com.jakewharton:butterknife:8.4.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+    //**********************
+    //高德地图
+    compile files('libs/Amap_2DMap_V4.2.0_20170209.jar')
+    compile files('libs/AMap_Location_V3.3.0_20170118.jar')
+    compile files('libs/AMap_Search_V5.0.0_20170309.jar')
+    compile files('libs/Android_Map3D_SDK_V5.0.0_20170311.jar')
+    //**********************
+    //Google volley net access
+    compile files('libs/Volley.jar')
+
+    //************************* Rx depandence
+    compile 'io.reactivex:rxjava:1.1.0'
+    compile 'io.reactivex:rxandroid:1.1.0'
+    compile 'com.squareup.retrofit2:retrofit:2.0.0-beta4'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta4'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0-beta4'
+    compile 'com.google.code.gson:gson:2.6.2'
+}

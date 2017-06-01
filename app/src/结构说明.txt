@@ -1,0 +1,32 @@
+com.meiling.mvp
+
+
+
+///细分时可以根据具体业务进行划分/或者根据APP的页面逻辑结构进行分层
+
+
+    module//模型层----存放实体、数据库等
+
+
+
+    presenter//业务处理层----业务处理逻辑、网络访问框架、数据处理0
+
+
+
+    view//视图层----存放页面、View组件、Dialog组件等
+
+
+
+
+Error:Unable to start the daemon process.
+This problem might be caused by incorrect configuration of the daemon.
+For example, an unrecognized jvm option is used.
+Please refer to the user guide chapter on the daemon at https://docs.gradle.org/2.14.1/userguide/gradle_daemon.html
+Please read the following process output to find out more:
+-----------------------
+Error occurred during initialization of VM
+Could not reserve enough space for 1572864KB object heap
+
+
+
+
