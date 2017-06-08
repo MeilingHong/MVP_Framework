@@ -2,6 +2,7 @@ package com.meiling.mvp.application;
 
 import android.app.Application;
 
+import com.meiling.mvp.module.datautil.LogUtil;
 import com.meiling.mvp.presenter.net.VolleyNetUtil;
 
 /**
@@ -10,13 +11,19 @@ import com.meiling.mvp.presenter.net.VolleyNetUtil;
 
 public class BaseApplication extends Application{
 
+    private static BaseApplication instances;
+
+    public static BaseApplication getInstances(){
+        return instances;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+        instances = this;
 
 
-
-        initVolley();
+//        initVolley();
     }
 
     //友盟组件
@@ -59,6 +66,13 @@ public class BaseApplication extends Application{
     public void initVolley(){
         VolleyNetUtil.getInstances().init(this);
     }
+    /*
+    ***********************************************
+     */
+    public void initLogUtil(){
+        LogUtil.getInstances();
+    }
+
     /*
     ***********************************************
      */
