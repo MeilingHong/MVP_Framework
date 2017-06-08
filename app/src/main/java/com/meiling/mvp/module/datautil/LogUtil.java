@@ -216,6 +216,11 @@ public class LogUtil {
         //TODO 将目前已有的错误日志文件打包，成一个Zip文件，然后删除大过的文件
     }
 
+    //TODO 将指定的文件上传到指定位置
+    public void updataFileToServer(File updataFile){
+        //TODO 考虑到不同的实际场景与要求，这个部分需要根据实际情况进行实现
+    }
+
     public void stopRecord() {
         singleThreadExecutor.shutdown();
     }
