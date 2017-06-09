@@ -3,34 +3,19 @@ package com.meiling.mvp.view.activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.meiling.mvp.R;
-import com.meiling.mvp.presenter.net.RetrofitUtil;
-import com.meiling.mvp.presenter.net.rx.net_result.GetResult;
-import com.meiling.mvp.presenter.net.rx.net_result.Login_Result;
-import com.meiling.mvp.presenter.net.rx.rx_service.RxGetRequest;
-import com.meiling.mvp.presenter.net.rx.rx_service.RxGetRequest2;
-import com.meiling.mvp.presenter.net.rx.rx_service.RxGetRequest3;
-import com.meiling.mvp.presenter.net.rx.rx_service.RxLoginService;
+import com.meiling.mvp.module.db.PhoneDBUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import retrofit2.Retrofit;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-
-import static android.R.string.cancel;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -142,28 +127,33 @@ public class MainActivity extends AppCompatActivity {
 //                    }
 //                });
         //TODO Get Reqesut ,Completed
-        Retrofit retrofit = RetrofitUtil.getRetrofit("http://app.quanjiakan.com");
-        RxGetRequest3 rxGetRequest = retrofit.create(RxGetRequest3.class);
-        rxGetRequest.getReqesut("childWatch","watchlist","11303")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<GetResult>() {
-                    @Override
-                    public void onCompleted() {
-                        Toast.makeText(MainActivity.this, "Get Top Movie Completed", Toast.LENGTH_SHORT).show();
-                    }
+//        Retrofit retrofit = RetrofitUtil.getRetrofit("http://app.quanjiakan.com");
+//        RxGetRequest3 rxGetRequest = retrofit.create(RxGetRequest3.class);
+//        rxGetRequest.getReqesut("childWatch","watchlist","11303")
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Subscriber<GetResult>() {
+//                    @Override
+//                    public void onCompleted() {
+//                        Toast.makeText(MainActivity.this, "Get Top Movie Completed", Toast.LENGTH_SHORT).show();
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        Log.e("LOGUTIL","Error:"+e.getMessage());
+//                    }
+//
+//                    @Override
+//                    public void onNext(GetResult response) {
+//                        Log.e("LOGUTIL","Result:"+response.toString());
+//                    }
+//                });
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e("LOGUTIL","Error:"+e.getMessage());
-                    }
+//        PhoneDBUtil.getCallLogRecord(this);
 
-                    @Override
-                    public void onNext(GetResult response) {
-                        Log.e("LOGUTIL","Result:"+response.toString());
-                    }
-                });
-
+//        PhoneDBUtil.getPhoneContacts(this);
+//        PhoneDBUtil.getSIMContacts(this);
+        PhoneDBUtil.getSmsInPhone(this);
     }
 
     public void showDialog_withAnimation(){
