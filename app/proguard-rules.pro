@@ -15,3 +15,7 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+# Retrofit 使用时需要排除混淆的部分，否则进行混淆时会报错
+-keep class com.codehaus.**{ *;}
+-dontwarn com.codehaus.**
