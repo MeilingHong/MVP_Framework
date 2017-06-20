@@ -16,9 +16,14 @@
 #   public *;
 #}
 
+
+
+#************************************************************************************
 # Retrofit 使用时需要排除混淆的部分，否则进行混淆时会报错
 -keep class com.codehaus.**{ *;}
 -dontwarn com.codehaus.**
+# 需要同时禁止警告的部分
 # 混淆打包时出现 okio.DeflaterSink: can't find referenced class org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement 的异常
 -dontwarn okio.**
 -dontwarn retrofit2.Platform$Java8
+#************************************************************************************
