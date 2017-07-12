@@ -6,4 +6,9 @@
     <string name="content">Content</string>
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
+
+
+    <!-- Permission -->
+    <string name="permission_call">未授予拨打电话权限</string>
+    <string name="permission_vibrate">未授予震动权限</string>
 </resources>

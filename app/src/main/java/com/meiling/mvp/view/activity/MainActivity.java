@@ -12,12 +12,14 @@ import android.widget.TextView;
 
 import com.meiling.mvp.R;
 import com.meiling.mvp.module.db.PhoneDBUtil;
+import com.meiling.mvp.view.BaseActivity;
+import com.meiling.mvp.view.IActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     /**
      * ButterKnife 进行以来注入，对于不需要使用的组件最好不进行注入
@@ -195,4 +197,44 @@ public class MainActivity extends AppCompatActivity {
         mDialog.show();
     }
 
+    //*********************************************************************************
+    @Override
+    public View getView(int resourceID) {
+        return null;
+    }
+
+    @Override
+    public void setView(int resourceID, ViewTYPE viewTYPE, Object data) {
+
+    }
+
+    @Override
+    public void setViewTag(int resourceID, ViewTYPE viewTYPE, Object data) {
+
+    }
+
+    @Override
+    public Object getParamter(int type) {
+        return null;
+    }
+
+    @Override
+    public void showMyDialog(int type) {
+
+    }
+
+    @Override
+    public void dismissMyDialog(int type) {
+
+    }
+
+    @Override
+    public void onSuccess(int type, int httpResponseCode, Object result) {
+
+    }
+
+    @Override
+    public void onError(int type, int httpResponseCode, Object errorMsg) {
+
+    }
 }

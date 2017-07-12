@@ -10,6 +10,7 @@ import android.telephony.TelephonyManager;
 public class CharUtil {
 
     public static String getIMEI(Context context) {
+
         TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(context.TELEPHONY_SERVICE);
         String imei = telephonyManager.getDeviceId();
         return imei;

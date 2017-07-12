@@ -7,6 +7,9 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 
+import com.meiling.mvp.R;
+import com.meiling.mvp.view.toast.ToastUtil;
+
 /**
  * Created by Administrator on 2017/6/9 0009.
  */
@@ -21,8 +24,10 @@ public class CallPhoneUtil {
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
+            ToastUtil.toastLong(activity,activity.getString(R.string.permission_call));
             return;
         }
+        //TODO 含有国际地区编码的电话应该如何进行判断，暂时未发现合适的
         Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNumber));
         activity.startActivity(intent);
     }
