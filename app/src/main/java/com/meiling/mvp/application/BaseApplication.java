@@ -3,10 +3,9 @@ package com.meiling.mvp.application;
 import android.app.Application;
 
 import com.meiling.mvp.module.datautil.LogUtil;
-import com.meiling.mvp.presenter.net.VolleyNetUtil;
 
 /**
- * Created by john on 2017-04-21.
+ * Created by john on 2017-04-21
  */
 
 public class BaseApplication extends Application{
@@ -23,7 +22,6 @@ public class BaseApplication extends Application{
         instances = this;
 
 
-//        initVolley();
     }
 
     //友盟组件
@@ -62,16 +60,9 @@ public class BaseApplication extends Application{
     public void initRetrofit(){
 
     }
-
-    public void initVolley(){
-        VolleyNetUtil.getInstances().init(this);
-    }
     /*
     ***********************************************
      */
-    public void initLogUtil(){
-        LogUtil.getInstances();
-    }
 
     /*
     ***********************************************
