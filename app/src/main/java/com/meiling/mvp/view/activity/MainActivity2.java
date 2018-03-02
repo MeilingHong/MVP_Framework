@@ -1,9 +1,7 @@
 package com.meiling.mvp.view.activity;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -12,16 +10,14 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.meiling.mvp.R;
-import com.meiling.mvp.module.datautil.LogUtil;
 import com.meiling.mvp.module.db.PhoneDBUtil;
 import com.meiling.mvp.view.BaseActivity;
-import com.meiling.mvp.view.IActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity2 extends BaseActivity {
 
     /**
      * ButterKnife 进行以来注入，对于不需要使用的组件最好不进行注入
@@ -42,22 +38,9 @@ public class MainActivity extends BaseActivity {
             case R.id.click:
 //                showDialog_withAnimation();
 //                accessNet();
-                Intent intent = new Intent(this,MainActivity2.class);
-                startActivityForResult(intent,2);
+                finish();
                 break;
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        LogUtil.getInstances().e("onResume");
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        LogUtil.getInstances().e("onActivityResult");
     }
 
     public void accessNet(){

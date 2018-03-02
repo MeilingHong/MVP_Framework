@@ -1,9 +1,11 @@
 package com.meiling.mvp.view.activity;
 
 import android.app.Dialog;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+//import android.support.v4.app.FragmentManager;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -15,49 +17,97 @@ import com.meiling.mvp.R;
 import com.meiling.mvp.module.datautil.LogUtil;
 import com.meiling.mvp.module.db.PhoneDBUtil;
 import com.meiling.mvp.view.BaseActivity;
-import com.meiling.mvp.view.IActivity;
+import com.meiling.mvp.view.fragment.FirstFragment;
+import com.meiling.mvp.view.fragmentv4.FirstFragmentV4;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends BaseActivity {
+public class FragmentActivity extends BaseActivity {
 
     /**
      * ButterKnife 进行以来注入，对于不需要使用的组件最好不进行注入
      */
-    @BindView(R.id.click)
-    TextView click;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_fragment);
         ButterKnife.bind(this);
-    }
-
-    @OnClick({R.id.click})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.click:
-//                showDialog_withAnimation();
-//                accessNet();
-                Intent intent = new Intent(this,MainActivity2.class);
-                startActivityForResult(intent,2);
-                break;
-        }
+        setFragmentV4();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        LogUtil.getInstances().e("onResume");
+        LogUtil.getInstances().e("FragmentActivity onResume");
+    }
+
+    //FragmentManager 在一个Activity容器中只能使用一个
+    public void setFragment(){
+        //TODO android.app
+        /*
+03-02 09:35:39.689 29860-29860/? E/MVP_Frame: FragmentActivity onResume
+03-02 09:35:39.694 29860-29860/? E/MVP_Frame: FirstFragment onResume
+03-02 09:35:43.460 29860-29860/com.meiling.mvp E/MVP_Frame: onActivityResult requestCode:2000
+03-02 09:35:43.466 29860-29860/com.meiling.mvp E/MVP_Frame: FragmentActivity onResume
+03-02 09:35:43.471 29860-29860/com.meiling.mvp E/MVP_Frame: FirstFragment onResume
+**********************************************************************************************
+03-02 09:36:50.547 30579-30579/com.meiling.mvp E/MVP_Frame: FragmentActivity onResume
+03-02 09:36:50.553 30579-30579/com.meiling.mvp E/MVP_Frame: FirstFragment onResume
+03-02 09:37:45.280 30579-30579/com.meiling.mvp E/MVP_Frame: onActivityResult requestCode:2000
+03-02 09:37:45.284 30579-30579/com.meiling.mvp E/MVP_Frame: FragmentActivity onResume
+03-02 09:37:45.288 30579-30579/com.meiling.mvp E/MVP_Frame: FirstFragment onResume
+
+         */
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.container,new FirstFragment(),FirstFragment.class.getSimpleName());
+        fragmentTransaction.commit();
+    }
+    /*
+03-02 09:36:50.547 30579-30579/com.meiling.mvp E/MVP_Frame: FragmentActivity onResume
+03-02 09:36:50.553 30579-30579/com.meiling.mvp E/MVP_Frame: FirstFragment onResume
+03-02 09:37:45.280 30579-30579/com.meiling.mvp E/MVP_Frame: onActivityResult requestCode:2000
+03-02 09:37:45.284 30579-30579/com.meiling.mvp E/MVP_Frame: FragmentActivity onResume
+03-02 09:37:45.288 30579-30579/com.meiling.mvp E/MVP_Frame: FirstFragment onResume
+**********************
+03-02 09:38:20.247 31399-31399/com.meiling.mvp E/MVP_Frame: FragmentActivity onResume
+03-02 09:38:20.253 31399-31399/com.meiling.mvp E/MVP_Frame: FirstFragmentV4 onResume
+03-02 09:39:41.555 31399-31399/com.meiling.mvp E/MVP_Frame: onActivityResult requestCode:1000
+03-02 09:39:41.557 31399-31399/com.meiling.mvp E/MVP_Frame: FragmentActivity onActivityResult requestCode:66536
+03-02 09:39:41.562 31399-31399/com.meiling.mvp E/MVP_Frame: FragmentActivity onResume
+03-02 09:39:41.567 31399-31399/com.meiling.mvp E/MVP_Frame: FirstFragmentV4 onResume
+     */
+
+    public void setFragmentV4(){
+        //TODO  android.support.v4.app
+        /*
+03-02 09:34:47.888 29341-29341/? E/MVP_Frame: FragmentActivity onResume
+03-02 09:34:47.894 29341-29341/? E/MVP_Frame: FirstFragmentV4 onResume
+03-02 09:35:00.232 29341-29341/com.meiling.mvp E/MVP_Frame: onActivityResult requestCode:1000
+03-02 09:35:00.235 29341-29341/com.meiling.mvp E/MVP_Frame: FragmentActivity onActivityResult
+03-02 09:35:00.237 29341-29341/com.meiling.mvp E/MVP_Frame: FragmentActivity onResume
+03-02 09:35:00.240 29341-29341/com.meiling.mvp E/MVP_Frame: FirstFragmentV4 onResume
+*********************************************************************************************************
+03-02 09:38:20.247 31399-31399/com.meiling.mvp E/MVP_Frame: FragmentActivity onResume
+03-02 09:38:20.253 31399-31399/com.meiling.mvp E/MVP_Frame: FirstFragmentV4 onResume
+03-02 09:39:41.555 31399-31399/com.meiling.mvp E/MVP_Frame: onActivityResult requestCode:1000
+03-02 09:39:41.557 31399-31399/com.meiling.mvp E/MVP_Frame: FragmentActivity onActivityResult requestCode:66536
+03-02 09:39:41.562 31399-31399/com.meiling.mvp E/MVP_Frame: FragmentActivity onResume
+03-02 09:39:41.567 31399-31399/com.meiling.mvp E/MVP_Frame: FirstFragmentV4 onResume
+         */
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.container,new FirstFragmentV4(),FirstFragment.class.getSimpleName());
+        fragmentTransaction.commit();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        LogUtil.getInstances().e("onActivityResult");
+        LogUtil.getInstances().e("FragmentActivity onActivityResult requestCode:"+requestCode);
     }
 
     public void accessNet(){
@@ -253,4 +303,5 @@ public class MainActivity extends BaseActivity {
     public void onError(int type, int httpResponseCode, Object errorMsg) {
 
     }
+
 }
