@@ -2,10 +2,13 @@ package com.meiling.framework.permission;
 
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.annotation.NonNull;
 
 import com.meiling.framework.common.BaseActivity;
 import com.meiling.framework.common.BaseFragment;
 import com.meiling.framework.common.BaseFragmentV4;
+import com.meiling.framework.permission.interfaces.ICommonPermission;
+import com.meiling.framework.permission.interfaces.ICommonPermissionCallback;
 
 /**
  * Created by Administrator on 15:48.
@@ -17,33 +20,33 @@ import com.meiling.framework.common.BaseFragmentV4;
  */
 
 public class CommonPermissionCheck {
-    public static boolean checkPermission(final BaseActivity activity, final PermissionType permissionType) {
+    public static boolean checkPermission(final BaseActivity activity, final PermissionType permissionType,@NonNull final ICommonPermissionCallback permissionCallback) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             switch (permissionType) {
                 case CALENDAR: {
                     if(!checkGrantedResult(activity, permissionType)){
-                        requestPermissions(activity, permissionType);
+                        requestPermissions(activity, permissionType,permissionCallback);
                         return false;
                     }
                     return true;
                 }
                 case CAMERA: {
                     if(!checkGrantedResult(activity, permissionType)){
-                        requestPermissions(activity, permissionType);
+                        requestPermissions(activity, permissionType,permissionCallback);
                         return false;
                     }
                     return true;
                 }
                 case CONTACTS: {
                     if(!checkGrantedResult(activity, permissionType)){
-                        requestPermissions(activity, permissionType);
+                        requestPermissions(activity, permissionType,permissionCallback);
                         return false;
                     }
                     return true;
                 }
                 case VOICE_RECORD: {
                     if(!checkGrantedResult(activity, permissionType)){
-                        requestPermissions(activity, permissionType);
+                        requestPermissions(activity, permissionType,permissionCallback);
                         return false;
                     }
                     return true;
@@ -51,28 +54,28 @@ public class CommonPermissionCheck {
 
                 case PHONE: {
                     if(!checkGrantedResult(activity, permissionType)){
-                        requestPermissions(activity, permissionType);
+                        requestPermissions(activity, permissionType,permissionCallback);
                         return false;
                     }
                     return true;
                 }
                 case LOCATION: {
                     if(!checkGrantedResult(activity, permissionType)){
-                        requestPermissions(activity, permissionType);
+                        requestPermissions(activity, permissionType,permissionCallback);
                         return false;
                     }
                     return true;
                 }
                 case SENSORS: {
                     if(!checkGrantedResult(activity, permissionType)){
-                        requestPermissions(activity, permissionType);
+                        requestPermissions(activity, permissionType,permissionCallback);
                         return false;
                     }
                     return true;
                 }
                 case STORAGE: {
                     if(!checkGrantedResult(activity, permissionType)){
-                        requestPermissions(activity, permissionType);
+                        requestPermissions(activity, permissionType,permissionCallback);
                         return false;
                     }
                     return true;
@@ -80,7 +83,14 @@ public class CommonPermissionCheck {
 
                 case SMS: {
                     if(!checkGrantedResult(activity, permissionType)){
-                        requestPermissions(activity, permissionType);
+                        requestPermissions(activity, permissionType,permissionCallback);
+                        return false;
+                    }
+                    return true;
+                }
+                case PHONE_CALL:{
+                    if(!checkGrantedResult(activity, permissionType)){
+                        requestPermissions(activity, permissionType,permissionCallback);
                         return false;
                     }
                     return true;
@@ -90,33 +100,33 @@ public class CommonPermissionCheck {
         return true;
     }
 
-    public static boolean checkPermission(final BaseFragment activity, final PermissionType permissionType) {
+    public static boolean checkPermission(final BaseFragment activity, final PermissionType permissionType,final ICommonPermissionCallback permissionCallback) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             switch (permissionType) {
                 case CALENDAR: {
                     if(!checkGrantedResult(activity, permissionType)){
-                        requestPermissions(activity, permissionType);
+                        requestPermissions(activity, permissionType,permissionCallback);
                         return false;
                     }
                     return true;
                 }
                 case CAMERA: {
                     if(!checkGrantedResult(activity, permissionType)){
-                        requestPermissions(activity, permissionType);
+                        requestPermissions(activity, permissionType,permissionCallback);
                         return false;
                     }
                     return true;
                 }
                 case CONTACTS: {
                     if(!checkGrantedResult(activity, permissionType)){
-                        requestPermissions(activity, permissionType);
+                        requestPermissions(activity, permissionType,permissionCallback);
                         return false;
                     }
                     return true;
                 }
                 case VOICE_RECORD: {
                     if(!checkGrantedResult(activity, permissionType)){
-                        requestPermissions(activity, permissionType);
+                        requestPermissions(activity, permissionType,permissionCallback);
                         return false;
                     }
                     return true;
@@ -124,28 +134,28 @@ public class CommonPermissionCheck {
 
                 case PHONE: {
                     if(!checkGrantedResult(activity, permissionType)){
-                        requestPermissions(activity, permissionType);
+                        requestPermissions(activity, permissionType,permissionCallback);
                         return false;
                     }
                     return true;
                 }
                 case LOCATION: {
                     if(!checkGrantedResult(activity, permissionType)){
-                        requestPermissions(activity, permissionType);
+                        requestPermissions(activity, permissionType,permissionCallback);
                         return false;
                     }
                     return true;
                 }
                 case SENSORS: {
                     if(!checkGrantedResult(activity, permissionType)){
-                        requestPermissions(activity, permissionType);
+                        requestPermissions(activity, permissionType,permissionCallback);
                         return false;
                     }
                     return true;
                 }
                 case STORAGE: {
                     if(!checkGrantedResult(activity, permissionType)){
-                        requestPermissions(activity, permissionType);
+                        requestPermissions(activity, permissionType,permissionCallback);
                         return false;
                     }
                     return true;
@@ -153,7 +163,14 @@ public class CommonPermissionCheck {
 
                 case SMS: {
                     if(!checkGrantedResult(activity, permissionType)){
-                        requestPermissions(activity, permissionType);
+                        requestPermissions(activity, permissionType,permissionCallback);
+                        return false;
+                    }
+                    return true;
+                }
+                case PHONE_CALL:{
+                    if(!checkGrantedResult(activity, permissionType)){
+                        requestPermissions(activity, permissionType,permissionCallback);
                         return false;
                     }
                     return true;
@@ -163,33 +180,33 @@ public class CommonPermissionCheck {
         return true;
     }
 
-    public static boolean checkPermission(final BaseFragmentV4 activity, final PermissionType permissionType) {
+    public static boolean checkPermission(final BaseFragmentV4 activity, final PermissionType permissionType,final ICommonPermissionCallback permissionCallback) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             switch (permissionType) {
                 case CALENDAR: {
                     if(!checkGrantedResult(activity, permissionType)){
-                        requestPermissions(activity, permissionType);
+                        requestPermissions(activity, permissionType,permissionCallback);
                         return false;
                     }
                     return true;
                 }
                 case CAMERA: {
                     if(!checkGrantedResult(activity, permissionType)){
-                        requestPermissions(activity, permissionType);
+                        requestPermissions(activity, permissionType,permissionCallback);
                         return false;
                     }
                     return true;
                 }
                 case CONTACTS: {
                     if(!checkGrantedResult(activity, permissionType)){
-                        requestPermissions(activity, permissionType);
+                        requestPermissions(activity, permissionType,permissionCallback);
                         return false;
                     }
                     return true;
                 }
                 case VOICE_RECORD: {
                     if(!checkGrantedResult(activity, permissionType)){
-                        requestPermissions(activity, permissionType);
+                        requestPermissions(activity, permissionType,permissionCallback);
                         return false;
                     }
                     return true;
@@ -197,28 +214,28 @@ public class CommonPermissionCheck {
 
                 case PHONE: {
                     if(!checkGrantedResult(activity, permissionType)){
-                        requestPermissions(activity, permissionType);
+                        requestPermissions(activity, permissionType,permissionCallback);
                         return false;
                     }
                     return true;
                 }
                 case LOCATION: {
                     if(!checkGrantedResult(activity, permissionType)){
-                        requestPermissions(activity, permissionType);
+                        requestPermissions(activity, permissionType,permissionCallback);
                         return false;
                     }
                     return true;
                 }
                 case SENSORS: {
                     if(!checkGrantedResult(activity, permissionType)){
-                        requestPermissions(activity, permissionType);
+                        requestPermissions(activity, permissionType,permissionCallback);
                         return false;
                     }
                     return true;
                 }
                 case STORAGE: {
                     if(!checkGrantedResult(activity, permissionType)){
-                        requestPermissions(activity, permissionType);
+                        requestPermissions(activity, permissionType,permissionCallback);
                         return false;
                     }
                     return true;
@@ -226,7 +243,14 @@ public class CommonPermissionCheck {
 
                 case SMS: {
                     if(!checkGrantedResult(activity, permissionType)){
-                        requestPermissions(activity, permissionType);
+                        requestPermissions(activity, permissionType,permissionCallback);
+                        return false;
+                    }
+                    return true;
+                }
+                case PHONE_CALL:{
+                    if(!checkGrantedResult(activity, permissionType)){
+                        requestPermissions(activity, permissionType,permissionCallback);
                         return false;
                     }
                     return true;
@@ -333,6 +357,18 @@ public class CommonPermissionCheck {
                 case SMS: {
                     for (int i = 0; i < ICommonPermission.REQUEST_PERMISSIONS_SMS_ALL.length; i++) {
                         result = activity.checkSelfPermission(ICommonPermission.REQUEST_PERMISSIONS_SMS_ALL[i]) == PackageManager.PERMISSION_GRANTED ? true:false;
+                        if(result){
+                            continue;
+                        }else{
+                            break;
+                        }
+                    }
+                    return result;
+                }
+
+                case PHONE_CALL: {
+                    for (int i = 0; i < ICommonPermission.REQUEST_PERMISSIONS_PHONE_CALL.length; i++) {
+                        result = activity.checkSelfPermission(ICommonPermission.REQUEST_PERMISSIONS_PHONE_CALL[i]) == PackageManager.PERMISSION_GRANTED ? true:false;
                         if(result){
                             continue;
                         }else{
@@ -451,6 +487,18 @@ public class CommonPermissionCheck {
                     }
                     return result;
                 }
+
+                case PHONE_CALL: {
+                    for (int i = 0; i < ICommonPermission.REQUEST_PERMISSIONS_PHONE_CALL.length; i++) {
+                        result = activity.getActivity().checkSelfPermission(ICommonPermission.REQUEST_PERMISSIONS_PHONE_CALL[i]) == PackageManager.PERMISSION_GRANTED ? true:false;
+                        if(result){
+                            continue;
+                        }else{
+                            break;
+                        }
+                    }
+                    return result;
+                }
             }
         }
         return result;
@@ -561,13 +609,28 @@ public class CommonPermissionCheck {
                     }
                     return result;
                 }
+
+                case PHONE_CALL: {
+                    for (int i = 0; i < ICommonPermission.REQUEST_PERMISSIONS_PHONE_CALL.length; i++) {
+                        result = activity.getActivity().checkSelfPermission(ICommonPermission.REQUEST_PERMISSIONS_PHONE_CALL[i]) == PackageManager.PERMISSION_GRANTED ? true:false;
+                        if(result){
+                            continue;
+                        }else{
+                            break;
+                        }
+                    }
+                    return result;
+                }
             }
         }
         return result;
     }
 
-    private static void requestPermissions(final BaseActivity activity, final PermissionType permissionType) {
+    private static void requestPermissions(final BaseActivity activity, final PermissionType permissionType,@NonNull final ICommonPermissionCallback permissionCallback) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(activity!=null && permissionCallback!=null){
+                activity.setThisCallback(permissionCallback);
+            }
             switch (permissionType) {
                 case CALENDAR: {
                     activity.requestPermissions(ICommonPermission.REQUEST_PERMISSIONS_CALENDAR, ICommonPermission.CODE_REQUEST_PERMISSIONS_CALENDAR);
@@ -605,14 +668,22 @@ public class CommonPermissionCheck {
 
                 case SMS: {
                     activity.requestPermissions(ICommonPermission.REQUEST_PERMISSIONS_SMS_ALL, ICommonPermission.CODE_REQUEST_PERMISSIONS_SMS_ALL);
+                    break;
+                }
+
+                case PHONE_CALL: {
+                    activity.requestPermissions(ICommonPermission.REQUEST_PERMISSIONS_PHONE_CALL, ICommonPermission.CODE_REQUEST_PERMISSIONS_PHONE_CALL);
                     break;
                 }
             }
         }
     }
 
-    private static void requestPermissions(final BaseFragment activity, final PermissionType permissionType) {
+    private static void requestPermissions(final BaseFragment activity, final PermissionType permissionType,@NonNull final ICommonPermissionCallback permissionCallback) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(activity!=null && permissionCallback!=null){
+                activity.setThisCallback(permissionCallback);
+            }
             switch (permissionType) {
                 case CALENDAR: {
                     activity.requestPermissions(ICommonPermission.REQUEST_PERMISSIONS_CALENDAR, ICommonPermission.CODE_REQUEST_PERMISSIONS_CALENDAR);
@@ -650,14 +721,22 @@ public class CommonPermissionCheck {
 
                 case SMS: {
                     activity.requestPermissions(ICommonPermission.REQUEST_PERMISSIONS_SMS_ALL, ICommonPermission.CODE_REQUEST_PERMISSIONS_SMS_ALL);
+                    break;
+                }
+
+                case PHONE_CALL: {
+                    activity.requestPermissions(ICommonPermission.REQUEST_PERMISSIONS_PHONE_CALL, ICommonPermission.CODE_REQUEST_PERMISSIONS_PHONE_CALL);
                     break;
                 }
             }
         }
     }
 
-    private static void requestPermissions(final BaseFragmentV4 activity, final PermissionType permissionType) {
+    private static void requestPermissions(final BaseFragmentV4 activity, final PermissionType permissionType,@NonNull final ICommonPermissionCallback permissionCallback) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(activity!=null && permissionCallback!=null){
+                activity.setThisCallback(permissionCallback);
+            }
             switch (permissionType) {
                 case CALENDAR: {
                     activity.requestPermissions(ICommonPermission.REQUEST_PERMISSIONS_CALENDAR, ICommonPermission.CODE_REQUEST_PERMISSIONS_CALENDAR);
@@ -695,6 +774,11 @@ public class CommonPermissionCheck {
 
                 case SMS: {
                     activity.requestPermissions(ICommonPermission.REQUEST_PERMISSIONS_SMS_ALL, ICommonPermission.CODE_REQUEST_PERMISSIONS_SMS_ALL);
+                    break;
+                }
+
+                case PHONE_CALL: {
+                    activity.requestPermissions(ICommonPermission.REQUEST_PERMISSIONS_PHONE_CALL, ICommonPermission.CODE_REQUEST_PERMISSIONS_PHONE_CALL);
                     break;
                 }
             }

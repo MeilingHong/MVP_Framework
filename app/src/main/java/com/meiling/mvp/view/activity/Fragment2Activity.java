@@ -3,6 +3,7 @@ package com.meiling.mvp.view.activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -13,13 +14,12 @@ import android.widget.TextView;
 import com.meiling.mvp.R;
 import com.meiling.mvp.module.datautil.LogUtil;
 import com.meiling.mvp.module.db.PhoneDBUtil;
-import com.meiling.mvp.view.BaseActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class Fragment2Activity extends BaseActivity {
+public class Fragment2Activity extends AppCompatActivity {
 
     /**
      * ButterKnife 进行以来注入，对于不需要使用的组件最好不进行注入
@@ -212,43 +212,4 @@ public class Fragment2Activity extends BaseActivity {
     }
 
     //*********************************************************************************
-    @Override
-    public View getView(int resourceID) {
-        return null;
-    }
-
-    @Override
-    public void setView(int resourceID, ViewTYPE viewTYPE, Object data) {
-
-    }
-
-    @Override
-    public void setViewTag(int resourceID, ViewTYPE viewTYPE, Object data) {
-
-    }
-
-    @Override
-    public Object getParamter(int type) {
-        return null;
-    }
-
-    @Override
-    public void showMyDialog(int type) {
-
-    }
-
-    @Override
-    public void dismissMyDialog(int type) {
-
-    }
-
-    @Override
-    public void onSuccess(int type, int httpResponseCode, Object result) {
-
-    }
-
-    @Override
-    public void onError(int type, int httpResponseCode, Object errorMsg) {
-
-    }
 }

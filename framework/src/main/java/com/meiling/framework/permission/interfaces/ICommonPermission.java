@@ -1,4 +1,4 @@
-package com.meiling.framework.permission;
+package com.meiling.framework.permission.interfaces;
 
 import android.Manifest;
 
@@ -24,6 +24,7 @@ public interface ICommonPermission {
     int CODE_REQUEST_PERMISSIONS_VOICE_RECORD = 10008;
     //****************************
     int CODE_REQUEST_PERMISSIONS_SMS_ALL = 10009;
+    int CODE_REQUEST_PERMISSIONS_PHONE_CALL = 10010;
     /**
      * *******************************************************************************************************************
      */
@@ -46,6 +47,9 @@ public interface ICommonPermission {
     String[] REQUEST_PERMISSIONS_SMS_ALL = new String[]{
             Manifest.permission.READ_SMS, Manifest.permission.RECEIVE_WAP_PUSH, Manifest.permission.RECEIVE_MMS,
             Manifest.permission.RECEIVE_SMS, Manifest.permission.SEND_SMS};
+
+    String[] REQUEST_PERMISSIONS_PHONE_CALL = new String[]{
+            Manifest.permission.CALL_PHONE};
 
 
 

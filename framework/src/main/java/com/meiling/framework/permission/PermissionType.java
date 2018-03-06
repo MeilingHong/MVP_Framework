@@ -12,5 +12,5 @@ package com.meiling.framework.permission;
 public enum PermissionType {
     CONTACTS, PHONE, CALENDAR, CAMERA,
     SENSORS, LOCATION, STORAGE, VOICE_RECORD,
-    SMS;
+    SMS, PHONE_CALL;
 }
