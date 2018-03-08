@@ -15,6 +15,11 @@ import com.meiling.framework.permission.interfaces.ICommonPermissionCallback;
  * @date 2018-02-27   11:59
  */
 
+/**
+    res资源引用，提示（多语言兼容）
+    需要增加语言切换时的回调方法
+ */
+
 public abstract class BaseActivity extends AppCompatActivity implements IActivity{
 
     private ICommonPermissionCallback thisCallback;

@@ -1,10 +1,10 @@
-package com.meiling.mvp.application;
+package com.meiling.mvp.application.constants;
 
 /**
  * Created by Administrator on 2017/7/12.
  */
 
-public interface ISharePreferenceKey {
+public interface CommonSharePreferenceKey {
 
     String SP_FILE_NAME = "CommonStore";
 
