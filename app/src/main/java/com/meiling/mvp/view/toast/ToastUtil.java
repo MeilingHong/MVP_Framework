@@ -4,7 +4,13 @@ import android.content.Context;
 import android.widget.Toast;
 
 /**
- * Created by Administrator on 2017/7/12.
+ * 其实本身这种Toast的提示存在一定的局限性（当权限设置了，可能导致无法显示）
+ *
+ * @auther MeilingHong
+ * @date ${YEAR}-${MONTH}-${DAY} ${HOUR}:${MINUTE}
+ * @email marisareimu123@gmail.com
+ * @version 
+ * @description 添加描述
  */
 
 public class ToastUtil {

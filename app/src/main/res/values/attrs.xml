@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CircyeView">
+        <!--
+        foregroundColor: 前景颜色
+        backgroundColor: 背景颜色
+        ditch: 环的宽度
+        minSize: 整个View最小的大小
+        -->
+        <attr name="foregroundColor" format="color"></attr>
+        <attr name="backgroundColor" format="color"></attr>
+        <attr name="ditchWidth" format="dimension"></attr>
+        <attr name="minSize" format="dimension"></attr>
+        <attr name="gradient" format="float"></attr>
+    </declare-styleable>
+
+</resources>

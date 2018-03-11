@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:cycles="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/font_color_CCCCCC"
+    >
+
+    <com.meiling.mvp.view.widget.CircyeView
+        android:id="@+id/click"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"
+        android:padding="5dp"
+        android:background="@color/common_transparent"
+        cycles:foregroundColor="#ff33b5e5"
+        cycles:backgroundColor="#ffffffff"
+        cycles:ditchWidth="@dimen/size_10"
+        cycles:gradient="0.5"
+        />
+
+</RelativeLayout>
