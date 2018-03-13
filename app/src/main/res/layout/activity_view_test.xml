@@ -9,15 +9,15 @@
 
     <com.meiling.mvp.view.widget.CircyeView
         android:id="@+id/click"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="114dp"
+        android:layout_height="114dp"
         android:text="Hello World!"
         android:padding="5dp"
         android:background="@color/common_transparent"
         cycles:foregroundColor="#ff33b5e5"
-        cycles:backgroundColor="#ffffffff"
-        cycles:ditchWidth="@dimen/size_10"
-        cycles:gradient="0.5"
+        cycles:backgroundColor="@android:color/holo_orange_light"
+        cycles:ditchWidth="@dimen/size_5"
+        cycles:gradient="0.3"
         />
 
 </RelativeLayout>

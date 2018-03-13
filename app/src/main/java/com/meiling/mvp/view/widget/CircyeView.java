@@ -22,6 +22,7 @@ import com.meiling.mvp.R;
 
 public class CircyeView extends View {
 
+    private Context context;
     private int defaultMinSize = 100;
     private Paint mForegroundPaint;
     private Paint mBackgroundPaint;
@@ -36,15 +37,18 @@ public class CircyeView extends View {
 
     public CircyeView(Context context) {
         super(context);
+        this.context = context;
     }
 
     public CircyeView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.context = context;
         getAttributeInfo(context, attrs);
     }
 
     public CircyeView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.context = context;
         getAttributeInfo(context, attrs);
     }
 
@@ -114,7 +118,7 @@ public class CircyeView extends View {
         super.onDraw(canvas);
         getCenterPoint();
         initPaint();
-
+        canvas.drawColor(context.getResources().getColor(R.color.common_transparent));
         //TODO 使得画布旋转到正常Y轴开始
         canvas.rotate(270, centerX, centerY);
 
@@ -137,6 +141,7 @@ public class CircyeView extends View {
         //TODO 使用宽度为1的画笔逐步画出圆环
         /**
          * 绘制的圆环颜色不是很统一，有逐步绘制的线条感，发现打不到一步绘制完成的那种感觉
+         * TODO 解决方法：通过加大画笔宽度，覆盖两次绘制的边缘，可以解决这种不协调感觉
          */
         for (int i = 2; i < ditchWidth; i++) {
             rectF = new RectF(ditchWidth * 2 / 3 + (i - 1),
@@ -176,7 +181,7 @@ public class CircyeView extends View {
         mForegroundPaint = new Paint();
         mForegroundPaint.setColor(mForegroundColor);
         mForegroundPaint.setStyle(Paint.Style.STROKE);
-        mForegroundPaint.setStrokeWidth(1);//TODO 使用宽度为1的画笔逐步画出圆环
+        mForegroundPaint.setStrokeWidth(2);//TODO 使用宽度为2的画笔逐步画出圆环（增加宽度，让原来为1时两次绘制的边缘被覆盖，从而消除缝隙感觉）
 //        mForegroundPaint.setStrokeWidth(30);//TODO 使用宽度为30的画笔一次性画出圆环（前景）
         mForegroundPaint.setAntiAlias(true);
 
@@ -184,7 +189,7 @@ public class CircyeView extends View {
         mBackgroundPaint = new Paint();
         mBackgroundPaint.setColor(mBackgroundColor);
         mBackgroundPaint.setStyle(Paint.Style.STROKE);
-        mBackgroundPaint.setStrokeWidth(1);//TODO 使用宽度为1的画笔逐步画出圆环
+        mBackgroundPaint.setStrokeWidth(2);//TODO 使用宽度为2的画笔逐步画出圆环
 //        mBackgroundPaint.setStrokeWidth(28);//TODO 使用宽度为28的画笔一次性画出圆环（背景）
         mBackgroundPaint.setAntiAlias(true);
     }
