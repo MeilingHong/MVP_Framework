@@ -20,13 +20,17 @@ import com.meiling.mvp.module.datautil.LogUtil;
 
 /**
  * 能够嵌套滑动的ViewGroup
- *
+ * <p>
  * 竖直方向
  */
 public class MyVerticalScrollView extends ViewGroup {
     private Scroller mScroller;
     private float mLastMotionY = 0;
     private float y;
+    //http://blog.csdn.net/lib739449500/article/details/51850276
+    //TODO 边界值需要在onLayout中计算得到后保存下来，后面再次调用
+    private float firstChildTopBound;
+    private float lastChildBottomBound;
 
     public MyVerticalScrollView(Context context) {
         super(context);
@@ -44,10 +48,14 @@ public class MyVerticalScrollView extends ViewGroup {
     }
 
 
-    public void initScroller(Context context){
+    public void initScroller(Context context) {
         mScroller = new Scroller(context);
     }
 
+    /**
+     * http://blog.csdn.net/lib739449500/article/details/51850276
+     * Android Scroller OverScroller使用
+     */
     @Override
     public void computeScroll() {
         if (mScroller.computeScrollOffset()) {
@@ -94,10 +102,17 @@ public class MyVerticalScrollView extends ViewGroup {
         }
     }
 
+    /**
+     * https://www.jianshu.com/p/293d0c2f56cb
+     * http://ztelur.github.io/2016/03/16/Android-MotionEvent%E8%AF%A6%E8%A7%A3/
+     * http://ztelur.github.io/2016/03/27/Android-Scroll%E8%AF%A6%E8%A7%A3-%E4%B8%80-%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/
+     * http://ztelur.github.io/2016/02/11/%E5%9B%BE%E8%A7%A3Android%E4%BA%8B%E4%BB%B6%E4%BC%A0%E9%80%92%E4%B9%8BViewGroup%E7%AF%87/
+     * http://ztelur.github.io/2016/02/04/%E5%9B%BE%E8%A7%A3Android%E4%BA%8B%E4%BB%B6%E4%BC%A0%E9%80%92%E4%B9%8BView%E7%AF%87/
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         y = event.getY();
-        switch (event.getAction()){
+        switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 if (!mScroller.isFinished()) {
                     mScroller.abortAnimation();
@@ -107,17 +122,14 @@ public class MyVerticalScrollView extends ViewGroup {
             case MotionEvent.ACTION_MOVE:
                 float delt = mLastMotionY - y;
                 mLastMotionY = y;
-//                if(delt<0){
-//                    delt = 0;
-//                }else if(delt>getTotleHeight()){
-//                    delt = getTotleHeight();
-//                }
                 /**
                  * TODO 如何确定第一个子View上边界（需要将Margin计算进去）到了容器顶部
                  *
                  * TODO 如何确定最后一个View下边界（需要将Margin计算进去）到了容器底部
+                 *
+                 * 刷新View并没有触发使得View重新走onLayout方法，
                  */
-                scrollBy( 0, (int)delt);
+//                scrollBy(0, (int) delt);//TODO 这里的移动不会管容器View或者子View当前的位置，所以需要使用其他的数据来控制对这个操纵的调用
                 break;
             case MotionEvent.ACTION_UP:
                 invalidate();
@@ -157,8 +169,15 @@ public class MyVerticalScrollView extends ViewGroup {
         for (int i = 0; i < childCount; i++) {
             View childView = getChildAt(i);
             MarginLayoutParams marginLayoutParams = (MarginLayoutParams) childView.getLayoutParams();
-            height += childView.getMeasuredHeight()+marginLayoutParams.topMargin+marginLayoutParams.bottomMargin;
+            if (i == 0) {
+                firstChildTopBound = childView.getTop();
+            } else if (i == childCount) {
+                lastChildBottomBound = childView.getBottom() + marginLayoutParams.bottomMargin;
+            }
+            height += childView.getMeasuredHeight() + marginLayoutParams.topMargin + marginLayoutParams.bottomMargin;
         }
+        LogUtil.getInstances().e("firstChildTopBound:" + firstChildTopBound + "\n" +
+                "lastChildBottomBound:" + lastChildBottomBound);
         return height;
     }
 
@@ -166,12 +185,12 @@ public class MyVerticalScrollView extends ViewGroup {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         int count = getChildCount(); //记录当前的高度位置
         int curHeight = top; //将子View逐个摆放
-        LogUtil.getInstances().e("onLayout left:"+left+"\ntop:"+top+"\nright:"+right+"\nbottom:"+bottom);
+        LogUtil.getInstances().e("onLayout left:" + left + "\ntop:" + top + "\nright:" + right + "\nbottom:" + bottom);
         for (int i = 0; i < count; i++) {
             View child = getChildAt(i);
             int height = child.getMeasuredHeight();
             int width = child.getMeasuredWidth(); //摆放子View，参数分别是子View矩形区域的左、上、右、下边
-            child.layout(left+getPaddingLeft(), curHeight+getPaddingTop(), left + width, curHeight + height);//TODO 靠左，逐个摆放，高度逐步增加
+            child.layout(left + getPaddingLeft(), curHeight + getPaddingTop(), left + width, curHeight + height);//TODO 靠左，逐个摆放，高度逐步增加
             curHeight += height;
         }
     }

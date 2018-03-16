@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.meiling.mvp.R;
@@ -27,6 +28,9 @@ public class ViewGroupTestActivity extends AppCompatActivity {
      */
     @BindView(R.id.click)
     MyVerticalScrollView click;
+
+
+    private ScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
