@@ -26,6 +26,18 @@ import com.meiling.mvp.module.datautil.LogUtil;
  * 竖直方向
  */
 public class MyVerticalScrollView extends ViewGroup {
+    /**
+     * Scroller/OverScroller  的简单实用步骤
+     * TODO 1、声明并初始化一个Scroller/OverScroller
+     * TODO 2、通过onLayout 获取View的边界（上下边界，左右边界）
+     * TODO 3、设置拦截触摸事件onInterceptTouchEvent(MotionEvent ev)，当触摸事件达到魔盖特定条件时，进行拦截【即ViewGroup需要进行滑动时的条件】
+     * TODO 4、在onTouchEvent方法中进行条件判断，在ACTION_UP中，开始滚动（需要注意与ACTION_MOVE中的处理的冲突）
+     * TODO
+     * TODO
+     * TODO
+     * TODO
+     * TODO
+     */
     private Scroller mScroller;
     private float mLastMotionY = 0;
     private float delt;

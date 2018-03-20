@@ -161,7 +161,9 @@ public class CircyeView extends View {
 
             //TODO 画前景环（扇形）------通过移动与循环让图形显示出倾斜角度
             /**
-             * 可以通过控制斜率，来让倾斜度出现不同
+             * 可以通过控制斜率，来让倾斜度出现不同,
+             *
+             * TODO 更多的部分是对canvas，paint的属性，方法设置与调用
              */
             canvas.drawArc(rectF, 3 - gradient * i, 114, false, mForegroundPaint);
             canvas.drawArc(rectF, 123 - gradient * i, 114, false, mForegroundPaint);
