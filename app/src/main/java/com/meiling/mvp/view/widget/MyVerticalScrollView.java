@@ -10,9 +10,11 @@ package com.meiling.mvp.view.widget;
  */
 
 import android.content.Context;
+import android.support.v4.view.ViewConfigurationCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.Scroller;
 
@@ -26,11 +28,18 @@ import com.meiling.mvp.module.datautil.LogUtil;
 public class MyVerticalScrollView extends ViewGroup {
     private Scroller mScroller;
     private float mLastMotionY = 0;
+    private float delt;
     private float y;
+    private float mTotalMotionY = 0;
     //http://blog.csdn.net/lib739449500/article/details/51850276
     //TODO 边界值需要在onLayout中计算得到后保存下来，后面再次调用
     private float firstChildTopBound;
     private float lastChildBottomBound;
+
+    /**
+     * 判定为拖动的最小移动像素数
+     */
+    private int mTouchSlop;
 
     public MyVerticalScrollView(Context context) {
         super(context);
@@ -50,18 +59,10 @@ public class MyVerticalScrollView extends ViewGroup {
 
     public void initScroller(Context context) {
         mScroller = new Scroller(context);
-    }
-
-    /**
-     * http://blog.csdn.net/lib739449500/article/details/51850276
-     * Android Scroller OverScroller使用
-     */
-    @Override
-    public void computeScroll() {
-        if (mScroller.computeScrollOffset()) {
-            scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
-            postInvalidate();
-        }
+        //TODO 得到最小有效滑动距离
+        ViewConfiguration configuration = ViewConfiguration.get(context);
+        // 获取TouchSlop值
+        mTouchSlop = ViewConfigurationCompat.getScaledPagingTouchSlop(configuration);
     }
 
     /**
@@ -92,9 +93,11 @@ public class MyVerticalScrollView extends ViewGroup {
                 //如果只有高度是包裹内容
                 // 宽度设置为ViewGroup自己的测量宽度，高度设置为所有子View的高度总和
                 setMeasuredDimension(widthSize, getTotleHeight());
+                getMaxChildWidth();
             } else if (widthMode == MeasureSpec.AT_MOST) {
                 //如果只有宽度是包裹内容 //宽度设置为子View中宽度最大的值，高度设置为ViewGroup自己的测量值
                 setMeasuredDimension(getMaxChildWidth(), heightSize);
+                getTotleHeight();
             } else {
                 //TODO 避免未处理这种情况，导致显示上的异常
                 setMeasuredDimension(widthSize, heightSize);
@@ -120,18 +123,48 @@ public class MyVerticalScrollView extends ViewGroup {
                 mLastMotionY = event.getY();
                 break;
             case MotionEvent.ACTION_MOVE:
-                float delt = mLastMotionY - y;
-                mLastMotionY = y;
+                delt = mLastMotionY - y;
                 /**
                  * TODO 如何确定第一个子View上边界（需要将Margin计算进去）到了容器顶部
                  *
                  * TODO 如何确定最后一个View下边界（需要将Margin计算进去）到了容器底部
                  *
                  * 刷新View并没有触发使得View重新走onLayout方法，
+                 *
+                 * 针对滑动，需要自己记录当前滚动距离，总滚动距离的偏移值
+                 *
+                 *
+                 *  偏移数值与方向的关系
+                 *  向上移动为正，向下移动为负
+                 *
+                 *  存在的问题，由于一次滑动的Motion不一定能刚好滑动到顶部与底部的位置，所以最后的一次scrollBy(0, (int) delt)
+                 *  调用，可能会使得滑动的距离不够，或者超过了控制的距离
                  */
-//                scrollBy(0, (int) delt);//TODO 这里的移动不会管容器View或者子View当前的位置，所以需要使用其他的数据来控制对这个操纵的调用
-                break;
+
+                if (mTotalMotionY <= 0) {
+                    if (delt >= 0) {//TODO 控制移动更加平滑
+                        mTotalMotionY += delt;//用来记录每一个的偏移总和，得到从初始位置当当前位置的偏移
+                    }
+                    scrollTo(0,/*(int)(-mTotalMotionY)*/0);//向下移动到了顶部子View显示出来了，就不在移动
+                    //TODO 由于存在一个范围，需要进行调整所以应该进行回滚偏差值的距离，否则可能出现计算与实际显示不一致的情况
+                    LogUtil.getInstances().e("scrollBy(0,0)");
+                    break;
+                } else if (mTotalMotionY >= lastChildBottomBound - getMeasuredHeight()) {
+                    if (delt <= 0) {//TODO 控制移动更加平滑----避免出现
+                        mTotalMotionY += delt;//用来记录每一个的偏移总和，得到从初始位置当当前位置的偏移
+                    }
+                    scrollTo(0, /*(int)(-(mTotalMotionY-(lastChildBottomBound - getMeasuredHeight())))*/(int) lastChildBottomBound - getMeasuredHeight());//向上滚动到了最后一个子View的下边界显示出来了 TODO 当滚动到下边界时，应该是不再进行滚动，而不是再滚动600（这个逻辑错了）的距离，
+                    LogUtil.getInstances().e("scrollBy(0, (int) mTotalMotionY)：" + mTotalMotionY);
+                    break;
+                }else{
+                    mTotalMotionY += delt;//用来记录每一个的偏移总和，得到从初始位置当当前位置的偏移
+                    scrollBy(0, (int) delt);//TODO 这里的移动不会管容器View或者子View当前的位置，所以需要使用其他的数据来控制对这个操纵的调用
+                    LogUtil.getInstances().e("scrollBy(0, (int) delt)：" + delt);
+                    break;
+                }
             case MotionEvent.ACTION_UP:
+//                mScroller.startScroll(0, getScrollY(), 0, (int) (mLastMotionY - y));
+//                LogUtil.getInstances().e("ACTION_UP  getScrollY()：" + getScrollY()+"\nmLastMotionY - y:"+(mLastMotionY - y));
                 invalidate();
                 break;
 
@@ -139,6 +172,26 @@ public class MyVerticalScrollView extends ViewGroup {
                 break;
         }
         return true;
+    }
+
+    /**
+     * http://blog.csdn.net/lib739449500/article/details/51850276
+     * Android Scroller OverScroller使用
+     */
+    @Override
+    public void computeScroll() {
+        if (mScroller.computeScrollOffset()) {
+//            if((((int) lastChildBottomBound - getMeasuredHeight())//TODO 可滚动到的最下位置
+//                    - mScroller.getCurrY())>0 &&
+//                    mScroller.getCurrY()>0){//TODO 没有滚动到最下面
+////                scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
+//                LogUtil.getInstances().e("computeScroll mScroller.getCurrX()：" + mScroller.getCurrX()+"mScroller.getCurrY():"+mScroller.getCurrY()+"\n\n\n");
+//                postInvalidate();
+//            }else{
+//                postInvalidate();
+//                return;
+//            }
+        }
     }
 
     /***
@@ -149,12 +202,11 @@ public class MyVerticalScrollView extends ViewGroup {
         int maxWidth = 0;
         for (int i = 0; i < childCount; i++) {
             View childView = getChildAt(i);
-//            LayoutParams marginLayoutParams = childView.getLayoutParams();//这个属性中没有Margin
-            MarginLayoutParams marginLayoutParams = (MarginLayoutParams) childView.getLayoutParams();
+            /*MarginLayoutParams marginLayoutParams = (MarginLayoutParams) childView.getLayoutParams();*/
             if (childView.getMeasuredWidth() > maxWidth) {
-                maxWidth = childView.getMeasuredWidth() + marginLayoutParams.leftMargin + marginLayoutParams.rightMargin;
+                maxWidth = childView.getMeasuredWidth()/* + marginLayoutParams.leftMargin + marginLayoutParams.rightMargin*/;
             } else {
-                maxWidth = childView.getMeasuredWidth() + marginLayoutParams.leftMargin + marginLayoutParams.rightMargin;
+                maxWidth = childView.getMeasuredWidth()/* + marginLayoutParams.leftMargin + marginLayoutParams.rightMargin*/;
             }
         }
         return maxWidth;
@@ -168,19 +220,23 @@ public class MyVerticalScrollView extends ViewGroup {
         int height = 0;
         for (int i = 0; i < childCount; i++) {
             View childView = getChildAt(i);
-            MarginLayoutParams marginLayoutParams = (MarginLayoutParams) childView.getLayoutParams();
-            if (i == 0) {
-                firstChildTopBound = childView.getTop();
-            } else if (i == childCount) {
-                lastChildBottomBound = childView.getBottom() + marginLayoutParams.bottomMargin;
-            }
-            height += childView.getMeasuredHeight() + marginLayoutParams.topMargin + marginLayoutParams.bottomMargin;
+            /*MarginLayoutParams marginLayoutParams = (MarginLayoutParams) childView.getLayoutParams();*/
+            height += childView.getMeasuredHeight()/* + marginLayoutParams.topMargin + marginLayoutParams.bottomMargin*/;
         }
-        LogUtil.getInstances().e("firstChildTopBound:" + firstChildTopBound + "\n" +
-                "lastChildBottomBound:" + lastChildBottomBound);
+//        LogUtil.getInstances().e("firstChildTopBound:" + firstChildTopBound + "\n" +
+//                "lastChildBottomBound:" + lastChildBottomBound);
         return height;
     }
 
+    /**
+     * 参数的上下左右标识的是屏幕的宽高
+     *
+     * @param changed
+     * @param left
+     * @param top
+     * @param right
+     * @param bottom
+     */
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         int count = getChildCount(); //记录当前的高度位置
@@ -192,6 +248,33 @@ public class MyVerticalScrollView extends ViewGroup {
             int width = child.getMeasuredWidth(); //摆放子View，参数分别是子View矩形区域的左、上、右、下边
             child.layout(left + getPaddingLeft(), curHeight + getPaddingTop(), left + width, curHeight + height);//TODO 靠左，逐个摆放，高度逐步增加
             curHeight += height;
+            if (i == 0) {
+                firstChildTopBound = child.getTop();
+            } else if (i == count - 1) {
+                lastChildBottomBound = child.getBottom();
+            }
         }
+        /**
+         * 可以通过onLayout计算得到View的上下边界
+         */
+        LogUtil.getInstances().e("firstChildTopBound:" + firstChildTopBound + "\n" +
+                "lastChildBottomBound:" + lastChildBottomBound);
+    }
+
+
+    /**
+     * event.getX():表示的是触摸的点距离自身左边界的距离
+     * event.getY():表示的是触摸的点距离自身上边界的距离
+     * event.getRawX:表示的是触摸点距离屏幕左边界的距离
+     * event.getRawY:表示的是触摸点距离屏幕上边界的距离
+     * <p>
+     * scrollTo（int x,int y） 移动到指定位置（x,y）
+     * <p>
+     * scrollBy(int x,int y) 在当前位置基础上移动距离，分别为X方向上（水平方向/左右），Y方向上(竖直方向/上下)
+     */
+    //TODO 由于本身涉及到子控件，当自身需要进行滑动时，需要对子控件的事件进行拦截（避免可滑动的子控件与可滑动的父控件出现滑动冲突）
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        return super.onInterceptTouchEvent(ev);
     }
 }

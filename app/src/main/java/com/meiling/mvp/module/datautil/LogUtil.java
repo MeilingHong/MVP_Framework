@@ -47,7 +47,7 @@ public class LogUtil {
     private final int LOG_E = BuildConfig.LOG_E;
 
     //
-    private final int queueCapacity = 100000;//TODO 当限制队列的大小时使用
+    private final int queueCapacity = 10000;//TODO 当限制队列的大小时使用
     private final ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
     private final Queue<String> errorQueue = new LinkedBlockingQueue<>(/*queueCapacity*/);
 
