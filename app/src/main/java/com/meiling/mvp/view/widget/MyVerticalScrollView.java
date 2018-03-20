@@ -71,7 +71,7 @@ public class MyVerticalScrollView extends ViewGroup {
 
     public void initScroller(Context context) {
         mScroller = new Scroller(context);
-        //TODO 得到最小有效滑动距离
+        //TODO 得到最小有效滑动距离----似乎是系统默认值
         ViewConfiguration configuration = ViewConfiguration.get(context);
         // 获取TouchSlop值
         mTouchSlop = ViewConfigurationCompat.getScaledPagingTouchSlop(configuration);
@@ -117,28 +117,64 @@ public class MyVerticalScrollView extends ViewGroup {
         }
     }
 
+
+    /**
+     * event.getX():表示的是触摸的点距离自身左边界的距离
+     * event.getY():表示的是触摸的点距离自身上边界的距离
+     * event.getRawX:表示的是触摸点距离屏幕左边界的距离
+     * event.getRawY:表示的是触摸点距离屏幕上边界的距离
+     * <p>
+     * scrollTo（int x,int y） 移动到指定位置（x,y）
+     * <p>
+     * scrollBy(int x,int y) 在当前位置基础上移动距离，分别为X方向上（水平方向/左右），Y方向上(竖直方向/上下)
+     */
+    //TODO 由于本身涉及到子控件，当自身需要进行滑动时，需要对子控件的事件进行拦截（避免可滑动的子控件与可滑动的父控件出现滑动冲突）
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN: {
+                if (!mScroller.isFinished()) {
+                    mScroller.abortAnimation();
+                }
+                mLastMotionY = ev.getY();
+                break;
+            }
+            case MotionEvent.ACTION_MOVE: {
+                y = ev.getY();
+                float diff = mLastMotionY - y;
+                if (diff > mTouchSlop) {//TODO 当移动距离大于最小距离时拦截子控件的时间
+                    return true;
+                }
+            }
+        }
+        return super.onInterceptTouchEvent(ev);
+    }
+
     /**
      * https://www.jianshu.com/p/293d0c2f56cb
      * http://ztelur.github.io/2016/03/16/Android-MotionEvent%E8%AF%A6%E8%A7%A3/
      * http://ztelur.github.io/2016/03/27/Android-Scroll%E8%AF%A6%E8%A7%A3-%E4%B8%80-%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/
      * http://ztelur.github.io/2016/02/11/%E5%9B%BE%E8%A7%A3Android%E4%BA%8B%E4%BB%B6%E4%BC%A0%E9%80%92%E4%B9%8BViewGroup%E7%AF%87/
      * http://ztelur.github.io/2016/02/04/%E5%9B%BE%E8%A7%A3Android%E4%BA%8B%E4%BB%B6%E4%BC%A0%E9%80%92%E4%B9%8BView%E7%AF%87/
+     * <p>
+     * <p>
+     * <p>
+     * <p>
+     * <p>
+     * 1、得到最小滑动距离，在MOVE时进行判断，当偏移差值大于这个最小值时，进行滑动处理（即拦截向子控件分发事件），否则不进行滑动
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         y = event.getY();
         switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                if (!mScroller.isFinished()) {
-                    mScroller.abortAnimation();
-                }
-                mLastMotionY = event.getY();
-                break;
             case MotionEvent.ACTION_MOVE:
-                delt = mLastMotionY - y;
+                /**
+                 * //TODO 实际操作中发现，按照1:1的比例滑动，似乎速度有点快
+                 * //TODO 降低便宜比例，似乎能让滑动看起来更加流畅
+                 */
+                delt = (mLastMotionY - y)/10.0f;
                 /**
                  * TODO 如何确定第一个子View上边界（需要将Margin计算进去）到了容器顶部
-                 *
                  * TODO 如何确定最后一个View下边界（需要将Margin计算进去）到了容器底部
                  *
                  * 刷新View并没有触发使得View重新走onLayout方法，
@@ -153,29 +189,26 @@ public class MyVerticalScrollView extends ViewGroup {
                  *  调用，可能会使得滑动的距离不够，或者超过了控制的距离
                  */
 
-                if (mTotalMotionY <= 0) {
+                if (getScrollY() + delt <= firstChildTopBound) {
                     if (delt >= 0) {//TODO 控制移动更加平滑
                         mTotalMotionY += delt;//用来记录每一个的偏移总和，得到从初始位置当当前位置的偏移
                     }
-                    scrollTo(0,/*(int)(-mTotalMotionY)*/0);//向下移动到了顶部子View显示出来了，就不在移动
+                    scrollTo(0,/*(int)(-mTotalMotionY)*/(int)firstChildTopBound);//向下移动到了顶部子View显示出来了，就不在移动
                     //TODO 由于存在一个范围，需要进行调整所以应该进行回滚偏差值的距离，否则可能出现计算与实际显示不一致的情况
-                    LogUtil.getInstances().e("scrollBy(0,0)");
+                    LogUtil.getInstances().e("getScrollY() + delt <= firstChildTopBound");
                     break;
-                } else if (mTotalMotionY >= lastChildBottomBound - getMeasuredHeight()) {
-                    if (delt <= 0) {//TODO 控制移动更加平滑----避免出现
-                        mTotalMotionY += delt;//用来记录每一个的偏移总和，得到从初始位置当当前位置的偏移
-                    }
-                    scrollTo(0, /*(int)(-(mTotalMotionY-(lastChildBottomBound - getMeasuredHeight())))*/(int) lastChildBottomBound - getMeasuredHeight());//向上滚动到了最后一个子View的下边界显示出来了 TODO 当滚动到下边界时，应该是不再进行滚动，而不是再滚动600（这个逻辑错了）的距离，
-                    LogUtil.getInstances().e("scrollBy(0, (int) mTotalMotionY)：" + mTotalMotionY);
+                } else if (getScrollY() + delt +getHeight() > lastChildBottomBound) {
+                    scrollTo(0, /*(int)(-(mTotalMotionY-(lastChildBottomBound - getMeasuredHeight())))*/(int) lastChildBottomBound - getHeight());//向上滚动到了最后一个子View的下边界显示出来了 TODO 当滚动到下边界时，应该是不再进行滚动，而不是再滚动600（这个逻辑错了）的距离，
+                    LogUtil.getInstances().e("getScrollY() + delt +getHeight() > lastChildBottomBound");
                     break;
-                }else{
+                } else {
                     mTotalMotionY += delt;//用来记录每一个的偏移总和，得到从初始位置当当前位置的偏移
                     scrollBy(0, (int) delt);//TODO 这里的移动不会管容器View或者子View当前的位置，所以需要使用其他的数据来控制对这个操纵的调用
                     LogUtil.getInstances().e("scrollBy(0, (int) delt)：" + delt);
                     break;
                 }
             case MotionEvent.ACTION_UP:
-//                mScroller.startScroll(0, getScrollY(), 0, (int) (mLastMotionY - y));
+                mScroller.startScroll(0, getScrollY(), 0, (int) (mLastMotionY - y));
 //                LogUtil.getInstances().e("ACTION_UP  getScrollY()：" + getScrollY()+"\nmLastMotionY - y:"+(mLastMotionY - y));
                 invalidate();
                 break;
@@ -203,6 +236,7 @@ public class MyVerticalScrollView extends ViewGroup {
 //                postInvalidate();
 //                return;
 //            }
+            LogUtil.getInstances().e("computeScroll mScroller.getCurrX()：" + mScroller.getCurrX()+"\nmScroller.getCurrY():"+mScroller.getCurrY()+"\n\n\n");
         }
     }
 
@@ -274,19 +308,4 @@ public class MyVerticalScrollView extends ViewGroup {
     }
 
 
-    /**
-     * event.getX():表示的是触摸的点距离自身左边界的距离
-     * event.getY():表示的是触摸的点距离自身上边界的距离
-     * event.getRawX:表示的是触摸点距离屏幕左边界的距离
-     * event.getRawY:表示的是触摸点距离屏幕上边界的距离
-     * <p>
-     * scrollTo（int x,int y） 移动到指定位置（x,y）
-     * <p>
-     * scrollBy(int x,int y) 在当前位置基础上移动距离，分别为X方向上（水平方向/左右），Y方向上(竖直方向/上下)
-     */
-    //TODO 由于本身涉及到子控件，当自身需要进行滑动时，需要对子控件的事件进行拦截（避免可滑动的子控件与可滑动的父控件出现滑动冲突）
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return super.onInterceptTouchEvent(ev);
-    }
 }
