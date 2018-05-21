@@ -3,7 +3,6 @@ package com.meiling.mvp.view.activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -13,7 +12,7 @@ import android.widget.TextView;
 
 import com.meiling.framework.common.BaseActivity;
 import com.meiling.mvp.R;
-import com.meiling.mvp.module.datautil.LogUtil;
+import com.meiling.mvp.module.datautil.log.LogUtil;
 import com.meiling.mvp.module.db.PhoneDBUtil;
 
 import butterknife.BindView;

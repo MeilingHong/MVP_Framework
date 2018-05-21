@@ -12,13 +12,12 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.meiling.mvp.R;
-import com.meiling.mvp.module.datautil.LogUtil;
+import com.meiling.mvp.module.datautil.log.LogUtil;
 import com.meiling.mvp.module.db.PhoneDBUtil;
 import com.meiling.mvp.view.widget.CircyeView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class ViewTestActivity extends AppCompatActivity {
 

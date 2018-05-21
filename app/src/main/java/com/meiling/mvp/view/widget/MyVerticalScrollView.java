@@ -18,7 +18,7 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.Scroller;
 
-import com.meiling.mvp.module.datautil.LogUtil;
+import com.meiling.mvp.module.datautil.log.LogUtil;
 
 /**
  * 能够嵌套滑动的ViewGroup

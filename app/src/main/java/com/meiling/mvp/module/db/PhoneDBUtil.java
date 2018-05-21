@@ -11,15 +11,12 @@ import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.meiling.mvp.module.datautil.LogUtil;
+import com.meiling.mvp.module.datautil.log.LogUtil;
 import com.meiling.mvp.module.dbentity.RecordEntity;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by Administrator on 2017/6/9 0009.

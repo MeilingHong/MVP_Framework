@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.meiling.mvp.R;
-import com.meiling.mvp.module.datautil.LogUtil;
+import com.meiling.mvp.module.datautil.log.LogUtil;
 import com.meiling.mvp.view.activity.MainActivity2;
 
 /**

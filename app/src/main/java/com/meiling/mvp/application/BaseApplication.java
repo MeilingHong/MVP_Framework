@@ -2,7 +2,7 @@ package com.meiling.mvp.application;
 
 import android.app.Application;
 
-import com.meiling.mvp.module.datautil.LogUtil;
+import com.meiling.mvp.module.datautil.log.LogUtil;
 
 /**
  * Created by john on 2017-04-21
@@ -21,7 +21,7 @@ public class BaseApplication extends Application{
         super.onCreate();
         instances = this;
 
-
+//        logComponent();
     }
 
     //友盟组件
@@ -63,7 +63,31 @@ public class BaseApplication extends Application{
     /*
     ***********************************************
      */
+    public void logComponent(){
+        Thread.currentThread().setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread t, Throwable e) {
+                //TODO 输出栈信息----日常的异常输出的信息
+                StringBuilder stringBuilder = new StringBuilder();
+                for (StackTraceElement element : e.getStackTrace()){
+                    stringBuilder.append(element.getClassName()+" . ");
+                    stringBuilder.append(element.getMethodName() +" (");
+                    stringBuilder.append(element.getFileName()+" : ");
+                    stringBuilder.append(element.getLineNumber()+" )");
+                    stringBuilder.append("\n");
+                }
+                //TODO
+                LogUtil.getInstances().e(t.getName()+
+                        "\n"+e.getLocalizedMessage()+
+                        "\nStackInfo:\n"+stringBuilder.toString()+
+                        "\n");
 
+                System.exit(0);//TODO 直接退出进程
+                //TODO 重新启动页面-------------启动不成功
+//                BaseApplication.getInstances().startActivity(new Intent(BaseApplication.getInstances(), MainActivity2.class));
+            }
+        });
+    }
     /*
     ***********************************************
      */

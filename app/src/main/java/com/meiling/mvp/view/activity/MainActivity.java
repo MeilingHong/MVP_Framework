@@ -12,7 +12,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.meiling.mvp.R;
-import com.meiling.mvp.module.datautil.LogUtil;
+import com.meiling.mvp.module.datautil.log.LogUtil;
 import com.meiling.mvp.module.db.PhoneDBUtil;
 
 import butterknife.BindView;
